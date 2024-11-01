@@ -28,36 +28,34 @@
     </nav>
 
     <div class="video-container">
-
-            <img src="{{ url_for('video_feed') }}" style="width: 100%; max-width: 600px;"/>
-    
+        <img src="{{ url_for('video_feed') }}" style="width: 100%; max-width: 600px;"/>
     </div>
 
     <div id="text-container">
         <div class="text-item">
-            <button class="button">Left</button>
+            <button class="button" onclick="moveServo(2, 'left')">Left</button>
             <span>BASE</span>
-            <button class="button">Right</button>
+            <button class="button" onclick="moveServo(2, 'right')">Right</button>
         </div>
         <div class="text-item">
-            <button class="button">Left</button>
+            <button class="button" onclick="moveServo(3, 'left')">Left</button>
             <span>SHOULDER</span>
-            <button class="button">Right</button>
+            <button class="button" onclick="moveServo(3, 'right')">Right</button>
         </div>
         <div class="text-item">
-            <button class="button">Left</button>
+            <button class="button" onclick="moveServo(4, 'left')">Left</button>
             <span>ELBOW</span>
-            <button class="button">Right</button>
+            <button class="button" onclick="moveServo(4, 'right')">Right</button>
         </div>
         <div class="text-item">
-            <button class="button">Left</button>
+            <button class="button" onclick="moveServo(17, 'left')">Left</button>
             <span>WRIST</span>
-            <button class="button">Right</button>
+            <button class="button" onclick="moveServo(17, 'right')">Right</button>
         </div>
         <div class="text-item">
-            <button class="button">OPEN</button>
+            <button class="button" onclick="moveFingers('open')">OPEN</button>
             <span>FINGERS</span>
-            <button class="button">CLOSE</button>
+            <button class="button" onclick="moveFingers('close')">CLOSE</button>
         </div>
     </div>
 
@@ -65,6 +63,26 @@
         function toggleMenu() {
             const navLinks = document.getElementById('nav-links');
             navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function moveServo(gpioNum, direction) {
+            fetch(`/move/${gpioNum}/${direction}`)
+                .then(response => {
+                    if (!response.ok) {
+                        console.error('Failed to move servo:', response.statusText);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        function moveFingers(action) {
+            fetch(`/move/fingers/${action}`)
+                .then(response => {
+                    if (!response.ok) {
+                        console.error('Failed to move fingers:', response.statusText);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         }
     </script>
 

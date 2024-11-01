@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robotic Arm</title>
+    <link rel="stylesheet" href="/static/whole.css">
+</head>
+<body>
+    <div id="splash-screen">
+        <video id="splash-video" autoplay muted playsinline>
+            <source src="/static/ALORA.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div id="main-content">
+        <!-- Your main app content goes here -->
+        <header>
+            
+            <div id="menu-button" onclick="toggleMenu()">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            
+            <nav id="dropdown-menu">
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+                <a href="#">Settings</a>
+            </nav>
+        </div>
+            <img src="/static/logo-removebg-preview.png" alt="Robotic Arm Logo" id="logo">
+           
+        </header>
+        <main>
+            <div class="login-container">
+                <h1>Login</h1>
+                <form action="/" method="post">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+    
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+    
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/robotic.js"></script>
+</body>
+
+</html>

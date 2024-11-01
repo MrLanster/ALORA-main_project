@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Frame with Text and Buttons</title>
+    <link rel="stylesheet" href="/static/whole.css">
+</head>
+<body>
+
+    <div class="header">
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="logo-container">
+            <img src="/static/logo-removebg-preview.png" alt="Logo" class="logo">
+        </div>
+    </div>
+
+    <nav class="nav-links" id="nav-links">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="/about" class="nav-link">About</a>
+        <a href="#services" class="nav-link">Services</a>
+        <a href="#contact" class="nav-link">Contact</a>
+        <a href="/logout" class="nav-link">Logout</a>
+    </nav>
+
+    <div class="video-container">
+
+            <img src="{{ url_for('video_feed') }}" style="width: 100%; max-width: 600px;"/>
+    
+    </div>
+
+    <div id="text-container">
+        <div class="text-item">
+            <button class="button">Left</button>
+            <span>BASE</span>
+            <button class="button">Right</button>
+        </div>
+        <div class="text-item">
+            <button class="button">Left</button>
+            <span>SHOULDER</span>
+            <button class="button">Right</button>
+        </div>
+        <div class="text-item">
+            <button class="button">Left</button>
+            <span>ELBOW</span>
+            <button class="button">Right</button>
+        </div>
+        <div class="text-item">
+            <button class="button">Left</button>
+            <span>WRIST</span>
+            <button class="button">Right</button>
+        </div>
+        <div class="text-item">
+            <button class="button">OPEN</button>
+            <span>FINGERS</span>
+            <button class="button">CLOSE</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const navLinks = document.getElementById('nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        }
+    </script>
+
+</body>
+</html>

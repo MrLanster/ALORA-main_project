@@ -1,0 +1,160 @@
+/* Set the splash screen to cover the entire viewport */
+/* Set the splash screen to cover the entire viewport */
+#splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color:royalblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+/* Make the video full screen */
+#splash-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+}
+
+
+/* Style the logo */
+#splash-logo {
+    width: 150px; /* Adjust the size of the logo */
+    height: auto;
+}
+
+/* Hide the main content initially */
+#main-content {
+    display: none;
+}
+
+/* Reset margin and padding for all elements */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Header styling */
+header {
+    width: 100%;
+    padding: 5px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #3D52A0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+/* Logo styling - Slightly larger on the second page */
+#logo {
+    width: 60px; /* Increase the size of the logo */
+    height: auto;
+    margin-left: 0;
+}
+
+/* Hamburger menu button styling */
+#menu-button {
+    width: 30px;
+    height: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+#menu-button .line {
+    width: 100%;
+    height: 3px;
+    background-color: #EDE8F5;
+}
+
+/* Dropdown menu styling */
+#dropdown-menu {
+    text-align: left;
+    display: none;
+    position: absolute;
+    top: 75px;
+    left: 20px;
+    background-color: #7091E6;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+#dropdown-menu a {
+    display: block;
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+}
+
+#dropdown-menu a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Main content styling */
+main {
+    margin-top: 50px; /* Adjusted to avoid content being hidden under the reduced header */
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 50px); /* Ensure the content takes at least full viewport height minus header */
+}
+
+/* Login container styling */
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-container label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #7091E6;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-container button:hover {
+    background-color: #7091E6;
+}

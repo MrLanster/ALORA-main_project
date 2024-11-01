@@ -1,10 +1,26 @@
 import cv2
+import numpy as np
+import torch
 from flask import Flask, render_template, Response, request, redirect, url_for, session, flash
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  
+app.secret_key = 'sdhgsydfg'
 
 camera = cv2.VideoCapture(0)
+
+model = torch.hub.load('ultralytics/yolov5', 'yolov5m')  
+
+def detect_objects(frame):
+    results = model(frame)  
+    results = results.xyxy[0].numpy()  
+
+    for *box, conf, cls in results:
+        x1, y1, x2, y2 = map(int, box)  
+        label = f'{model.names[int(cls)]} {conf:.2f}' 
+        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2) 
+        cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)  
+
+    return frame
 
 def generate_frames():
     while True:
@@ -12,6 +28,7 @@ def generate_frames():
         if not success:
             break
         else:
+            frame = detect_objects(frame)  
             _, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()  
             yield (b'--frame\r\n'
@@ -31,6 +48,7 @@ def index():
             return redirect(url_for('index'))  
 
     return render_template('login.html')
+
 @app.route("/about")
 def about():
     return render_template("about.html")
@@ -52,4 +70,4 @@ def video_feed():
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
-    app.run(debug=True,host="0.0.0.0")
+    app.run(debug=True, host="0.0.0.0")

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Alora</title>
+    <link rel="stylesheet" href="/static/about.css">
+</head>
+<body>
+    <!-- Header Section with Logo and Navigation Bar -->
+    <header class="header">
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="logo-container">
+            <img src="/static/logo-removebg-preview.png" alt="Alora Logo" class="logo">
+        </div>
+        <nav class="nav-links" id="nav-links">
+            <a href="/main" class="nav-link">Home</a>
+            <a href="/about" class="nav-link">About</a>
+            <a href="#services" class="nav-link">Services</a>
+            <a href="#contact" class="nav-link">Contact</a>
+            <a href="/logout" class="nav-link">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h1>About Alora</h1>
+            <p>
+                Alora is an innovative robotic arm designed to assist individuals in their daily tasks, enhancing productivity and making everyday activities easier. With its advanced technology and user-friendly interface, Alora can perform a variety of functions, from office support to emergency responce. Our mission is to empower users by integrating robotics seamlessly into their lives, helping them achieve more with less effort.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Alora. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const navLinks = document.getElementById('nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        }
+    </script>
+</body>
+</html>

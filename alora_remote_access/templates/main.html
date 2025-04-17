@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Frame with Button Control</title>
+    <link rel="stylesheet" href="/static/whole.css">
+    <style>
+        .button-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .control-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #000;
+            color: #fff;
+            border-radius: 5px;
+        }
+        .control-button:hover {
+            background-color: #333;
+        }
+        #temperature-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            margin: auto;
+        }
+        #coordinate-section {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            margin: 20px auto;
+        }
+        input {
+            width: 80px;
+            padding: 5px;
+            margin: 5px;
+            text-align: center;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="logo-container">
+            <img src="/static/logo-removebg-preview.png" alt="Logo" class="logo">
+        </div>
+    </div>
+
+    <nav class="nav-links" id="nav-links">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="/about" class="nav-link">About</a>
+        <a href="#services" class="nav-link">Services</a>
+        <a href="#contact" class="nav-link">Contact</a>
+        <a href="/logout" class="nav-link">Logout</a>
+    </nav>
+
+    <div class="video-container">
+        <img src="{{ url_for('video_feed') }}" style="width: 100%; max-width: 600px;"/>
+    </div>
+
+    <div id="text-container">
+        <div class="button-container">
+            <button class="control-button" onclick="sendCommand('base', 'left')">Left</button>
+
+            <div>BASE</div>
+            <button class="control-button" onclick="sendCommand('base', 'right')">Right</button>
+        </div>
+        <div class="button-container">
+            <button class="control-button" onclick="sendCommand('shoulder', 'left')">Left</button>
+            <div>SHOULDER</div>
+            <button class="control-button" onclick="sendCommand('shoulder', 'right')">Right</button>
+        </div>
+        <div class="button-container">
+            <button class="control-button" onclick="sendCommand('elbow', 'left')">Left</button>
+            <div>ELBOW</div>
+            <button class="control-button" onclick="sendCommand('elbow', 'right')">Right</button>
+        </div>
+        <div class="button-container">
+            <button class="control-button" onclick="sendCommand('wrist', 'left')">Left</button>
+            <div>WRIST</div>
+            <button class="control-button" onclick="sendCommand('wrist', 'right')">Right</button>
+        </div>
+        <div class="button-container">
+            <button class="control-button" onclick="sendCommand('fingers', 'left')">Left</button>
+            <div>FINGERS</div>
+            <button class="control-button" onclick="sendCommand('fingers', 'right')">Right</button>
+        </div>
+    </div>
+    <label>
+    <p id="response"></p>
+    <h2>Current Temperature <span id="range-value">Loading...</span>°C</h2>
+
+    <h2>Current Distance from arm <span id="temp-value">Loading...</span>cm</h2>
+    <div id="coordinate-section">
+        <h2>Move to Coordinates</h2>
+        <form id="coordinateForm">
+            <label>X: <input type="number" id="x_value" placeholder="X"></label>
+            <label>Y: <input type="number" id="y_value" placeholder="Y"></label>
+            <label>Z: <input type="number" id="z_value" placeholder="Z"></label>
+            <br>
+            <button id="move-btn" type="submit">Move</button>
+        </form>
+        <p id="move-status"></p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        let commandInterval = null;
+        let activeCommand = null;
+
+        function sendCommand(joint, direction) {
+            if (!joint || !direction) return; 
+            socket.emit('client_message', { 'data': { axis: joint, path: direction } });
+        }
+
+        function startCommand(joint, direction) {
+            if (commandInterval || activeCommand) return;
+
+            activeCommand = { joint, direction };
+            sendCommand(joint, direction);
+            commandInterval = setInterval(() => sendCommand(joint, direction), 200);
+        }
+
+        function stopCommand() {
+            if (commandInterval) {
+                clearInterval(commandInterval);
+                commandInterval = null;
+                activeCommand = null;
+            }
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.repeat) return;
+            switch (event.key) {
+                case 'ArrowLeft': startCommand('base', 'left'); break;
+                case 'ArrowRight': startCommand('base', 'right'); break;
+                case 'w': startCommand('shoulder', 'left'); break;
+                case 's': startCommand('shoulder', 'right'); break;
+                case 'a': startCommand('elbow', 'left'); break;
+                case 'd': startCommand('elbow', 'right'); break;
+                case 'q': startCommand('wrist', 'left'); break;
+                case 'e': startCommand('wrist', 'right'); break;
+                case 'z': startCommand('fingers', 'left'); break;
+                case 'x': startCommand('fingers', 'right'); break;
+            }
+        });
+
+        document.addEventListener('keyup', (event) => {
+            if (!activeCommand) return;
+            stopCommand();
+        });
+
+        document.querySelectorAll(".control-button").forEach(button => {
+            button.addEventListener("mousedown", function () {
+                const joint = this.getAttribute("data-joint");
+                const direction = this.getAttribute("data-direction");
+                if (!joint || !direction) return;
+                startCommand(joint, direction);
+            });
+
+            button.addEventListener("mouseup", stopCommand);
+            button.addEventListener("mouseleave", () => {
+                if (commandInterval) stopCommand();
+            });
+        });
+
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+        socket.on('server_response', function(data) {
+            console.log('Server:', data.message);
+            document.getElementById('response').innerText = data.message;
+        });
+
+        document.addEventListener("mouseup", stopCommand);
+        function range() {
+                    $.get('/get_range', function(data) {
+                        $('#range-value').text(data.range);
+                    }).fail(function() {
+                        $('#range-value').text('Error fetching data');
+                    });
+                }
+
+         $(document).ready(function() {
+            range();  
+            setInterval(range, 3000);  
+        });
+        function fetchTemperature() {
+                    $.get('/get_temp', function(data) {
+                        $('#temp-value').text(data.cpu_temp);
+                    }).fail(function() {
+                        $('#temp-value').text('Error fetching data');
+                    });
+                }
+
+         $(document).ready(function() {
+            fetchTemperature();  
+            setInterval(fetchTemperature, 1500);  
+        });
+        $(document).ready(function() {
+    $("#coordinateForm").submit(function(event) {
+        event.preventDefault(); 
+
+        var x = $("#x_value").val();
+        var y = $("#y_value").val();
+        var z = $("#z_value").val();
+
+        $.ajax({
+            url: "/update_coordinates",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ x: x, y: y, z: z }),
+            success: function(response) {
+                console.log("Response:", response);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error:", error);
+            }
+        });
+    });
+});
+
+    </script>
+
+</body>
+
+</html>
